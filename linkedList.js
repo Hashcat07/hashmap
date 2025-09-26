@@ -17,7 +17,7 @@ class LinkedList {
   updateNode(key,value)
   {
     let tmp=this.headNode
-    while(!tmp.key===key)
+    while(tmp.key!=key)
       tmp=tmp.nextNode
     tmp.value=value
   }

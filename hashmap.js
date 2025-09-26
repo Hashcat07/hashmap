@@ -9,8 +9,8 @@ class HashMap {
     let hashCode = 0;
     let primeNumber = 31;
     for (let i = 0; i < key.length; i++)
-      hashCode += (primeNumber * hashCode + key.charCodeAt(i)) % this.capacity;
-    return hashCode;
+      hashCode += (primeNumber * hashCode + key.charCodeAt(i)) % this.capacity
+    return hashCode ;
   }
   set(key, value) {
     let index = this.hash(key);
@@ -27,7 +27,28 @@ class HashMap {
     else
         list.append(key,value)
     }
-    
+    if(this.length()>this.capacity*this.loadFactor)
+    {
+      this.resize()
+    }
+  }
+  resize()
+  {
+    console.log('reached')
+    this.capacity*=2
+    let tmpArray=[...this.hashMap]
+    console.log('create temp')
+    console.log(tmpArray)
+    this.hashMap=new Array(this.capacity)
+    tmpArray.forEach(bucket=>{
+      if(bucket){
+      let tmp=bucket.head()
+      while(tmp!=null)
+      {
+        this.set(tmp.key,tmp.value)
+        tmp=tmp.nextNode
+      }}
+    })
   }
   get(key) {
     let index = this.hash(key);
@@ -100,3 +121,19 @@ class HashMap {
     return entries;
   }
 }
+
+ const test = new HashMap() // or HashMap() if using a factory
+ test.set('apple', 'red')
+ test.set('banana', 'yellow')
+ test.set('carrot', 'orange')
+ test.set('dog', 'brown')
+ test.set('elephant', 'gray')
+ test.set('frog', 'green')
+ test.set('grape', 'purple')
+ test.set('hat', 'black')
+ test.set('ice cream', 'white')
+ test.set('jacket', 'blue')
+ test.set('kite', 'pink')
+ test.set('lion', 'golden')
+ test.set('moon', 'silver')
+console.log(test.capacity)
