@@ -9,61 +9,52 @@ class HashMap {
     let hashCode = 0;
     let primeNumber = 31;
     for (let i = 0; i < key.length; i++)
-      hashCode += (primeNumber * hashCode + key.charCodeAt(i)) % this.capacity
-    return hashCode ;
+      hashCode += (primeNumber * hashCode + key.charCodeAt(i)) % this.capacity;
+    return hashCode;
   }
   set(key, value) {
     let index = this.hash(key);
-    if (!this.hashMap[index])
-    {
-        let list=new LinkedList()
-        list.append(key,value)
-        this.hashMap[index]=list
+    if (!this.hashMap[index]) {
+      let list = new LinkedList();
+      list.append(key, value);
+      this.hashMap[index] = list;
+    } else {
+      let list = this.hashMap[index];
+      if (this.has(key)) list.updateNode(key, value);
+      else list.append(key, value);
     }
-    else {
-    let list=this.hashMap[index]    
-    if(this.has(key))
-        list.updateNode(key,value)
-    else
-        list.append(key,value)
-    }
-    if(this.length()>this.capacity*this.loadFactor)
-    {
-      this.resize()
+    if (this.length() > this.capacity * this.loadFactor) {
+      this.resize();
     }
   }
-  resize()
-  {
-    console.log('reached')
-    this.capacity*=2
-    let tmpArray=[...this.hashMap]
-    console.log('create temp')
-    console.log(tmpArray)
-    this.hashMap=new Array(this.capacity)
-    tmpArray.forEach(bucket=>{
-      if(bucket){
-      let tmp=bucket.head()
-      while(tmp!=null)
-      {
-        this.set(tmp.key,tmp.value)
-        tmp=tmp.nextNode
-      }}
-    })
+  resize() {
+    this.capacity *= 2;
+    let tmpArray = [...this.hashMap];
+    this.hashMap = new Array(this.capacity);
+    tmpArray.forEach((bucket) => {
+      if (bucket) {
+        let tmp = bucket.head();
+        while (tmp != null) {
+          this.set(tmp.key, tmp.value);
+          tmp = tmp.nextNode;
+        }
+      }
+    });
   }
   get(key) {
     let index = this.hash(key);
     if (index < 0 || index >= this.hashMap.length) {
       throw new Error("Trying to access index out of bounds");
     }
-    if(!this.hashMap[index]) return null; 
-    return this.hashMap[index].find(key) 
+    if (!this.hashMap[index]) return null;
+    return this.hashMap[index].find(key);
   }
   has(key) {
     let index = this.hash(key);
     if (index < 0 || index >= this.hashMap.length) {
       throw new Error("Trying to access index out of bounds");
     }
-    if (this.hashMap[index]&&this.hashMap[index].contains(key)) return true;
+    if (this.hashMap[index] && this.hashMap[index].contains(key)) return true;
     return false;
   }
   remove(key) {
@@ -75,7 +66,7 @@ class HashMap {
   length() {
     let length = 0;
     for (let i = 0; i < this.hashMap.length; i++) {
-      if (this.hashMap[i]) length+=this.hashMap[i].size();
+      if (this.hashMap[i]) length += this.hashMap[i].size();
     }
     return length;
   }
@@ -86,12 +77,12 @@ class HashMap {
     let keys = [];
     this.hashMap.forEach((bucket) => {
       if (bucket) {
-        let tmp=bucket.head()
-        while(tmp!=null){
-            keys.push(tmp.key)
-            tmp=tmp.nextNode
+        let tmp = bucket.head();
+        while (tmp != null) {
+          keys.push(tmp.key);
+          tmp = tmp.nextNode;
         }
-      };
+      }
     });
     return keys;
   }
@@ -99,41 +90,28 @@ class HashMap {
     let values = [];
     this.hashMap.forEach((bucket) => {
       if (bucket) {
-        let tmp=bucket.head()
-        while(tmp!=null){
-            values.push(tmp.value)
-            tmp=tmp.nextNode
+        let tmp = bucket.head();
+        while (tmp != null) {
+          values.push(tmp.value);
+          tmp = tmp.nextNode;
         }
-      };
+      }
     });
     return values;
   }
   entries() {
     let entries = [];
     this.hashMap.forEach((bucket) => {
-        if(bucket){
-            let tmp=bucket.head()
-            while(tmp!=null){
-                entries.push([tmp.key, tmp.value]);
-                tmp=tmp.nextNode}
-            }
+      if (bucket) {
+        let tmp = bucket.head();
+        while (tmp != null) {
+          entries.push([tmp.key, tmp.value]);
+          tmp = tmp.nextNode;
+        }
+      }
     });
     return entries;
   }
 }
 
- const test = new HashMap() // or HashMap() if using a factory
- test.set('apple', 'red')
- test.set('banana', 'yellow')
- test.set('carrot', 'orange')
- test.set('dog', 'brown')
- test.set('elephant', 'gray')
- test.set('frog', 'green')
- test.set('grape', 'purple')
- test.set('hat', 'black')
- test.set('ice cream', 'white')
- test.set('jacket', 'blue')
- test.set('kite', 'pink')
- test.set('lion', 'golden')
- test.set('moon', 'silver')
-console.log(test.capacity)
+export { HashMap };
